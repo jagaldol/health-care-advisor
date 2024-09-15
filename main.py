@@ -1,8 +1,6 @@
 from FlagEmbedding import BGEM3FlagModel
 from pinecone import Pinecone
 
-from langchain_core.prompts import PromptTemplate
-
 import torch
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM, TextStreamer
 from langchain_huggingface import HuggingFacePipeline
@@ -14,32 +12,17 @@ from dotenv import load_dotenv
 import os
 
 from retriever import HybridSearchRetriever
+import template
 
 load_dotenv()
 
-
-
-template = """
-Instructions:
-- If the question involves a health-related issue, suggest possible causes and basic steps the user can take for relief, if applicable.
-- You should explain in as much detail as possible what you know from the bottom of your heart to the user's questions.
-- You can refer to the contents of the documents to create a response.
-- Only use information that is directly related to the question.
-- If no information is found in the documents, provide an answer based on general knowledge without fabricating details.
-- You MUST answer in Korean.
-
-
-Documents: {documents}
-
-Question: {question}
-"""
 
 # Load Models
 model_id="google/gemma-2-2b-it"
 gemma_2_model = AutoModelForCausalLM.from_pretrained(model_id)
 gemma_2_tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-embedding_model = BGEM3FlagModel('BAAI/bge-m3',use_fp16=True) # Setting use_fp16 to True speeds up computation with a slight performance degradation
+embedding_model = BGEM3FlagModel('BAAI/bge-m3', device='cuda')
 
 # Connect to the existing Pinecone index
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
@@ -68,15 +51,8 @@ gen = pipeline(task='text-generation',
 
 llm = HuggingFacePipeline(pipeline=gen)
 
-prev_chat = []
-
-chat = [*prev_chat,
-        { "role": "user", "content": template}
-        ]
-
-prompt_template = gemma_2_tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
-
-prompt = PromptTemplate(input_variables=["question", "context"], template=prompt_template)
+prev_chat=[]
+prompt = template.create_chat_prompt_template(prev_chat, gemma_2_tokenizer)
 
 rag_chain = ({"documents": retriever, "question": RunnablePassthrough()}
              | prompt
