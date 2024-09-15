@@ -1,63 +1,34 @@
-from FlagEmbedding import BGEM3FlagModel
-from pinecone import Pinecone
-
-import torch
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM, TextStreamer
-from langchain_huggingface import HuggingFacePipeline
-
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-from dotenv import load_dotenv
-import os
-
-from retriever import HybridSearchRetriever
-import template
-
-load_dotenv()
+import models, ragchain, retriever, template, utils
 
 
-# Load Models
-model_id="google/gemma-2-2b-it"
-gemma_2_model = AutoModelForCausalLM.from_pretrained(model_id)
-gemma_2_tokenizer = AutoTokenizer.from_pretrained(model_id)
+def main():
+    # 환경 설정 로드
+    utils.load_environment()
 
-embedding_model = BGEM3FlagModel('BAAI/bge-m3', device='cuda')
+    # 모델 및 토크나이저 로드
+    gemma_2_model, gemma_2_tokenizer = models.load_gemma_model("google/gemma-2-2b-it")
+    embedding_model = models.load_embedding_model('BAAI/bge-m3')
 
-# Connect to the existing Pinecone index
-pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-pinecone_index = pc.Index("health-care")
+    # Retriever 설정
+    rag_retriever = retriever.setup_retriever(embedding_model)
+
+    # 프롬프트 생성
+    prompt = template.create_chat_prompt_template(gemma_2_tokenizer)
     
-retriever = HybridSearchRetriever(pinecone_index=pinecone_index,
-                                  embedding_model=embedding_model,
-                                  alpha=0.95,
-                                  top_k=3,
-                                  min_score=0.55,
-                                  )
+    # 텍스트 생성 파이프라인 설정
+    llm = ragchain.setup_text_generation_pipeline(gemma_2_model, gemma_2_tokenizer)
 
-streamer = TextStreamer(gemma_2_tokenizer, skip_prompt=True, skip_special_tokens=True)
 
-gen = pipeline(task='text-generation',
-               model=gemma_2_model,
-               tokenizer=gemma_2_tokenizer,
-               max_new_tokens=1024,
-               streamer=streamer,
-               device=0 if torch.cuda.is_available() else -1,
-               temperature=.5,
-               top_p=0.7,
-               repetition_penalty=1.1,
-               do_sample=True,
-               )
+    # RAG 체인 설정 및 답변 생성
+    rag_chain = ({"documents": rag_retriever, "question": RunnablePassthrough()}
+                 | prompt
+                 | llm
+                 | StrOutputParser())
+    
+    answer = rag_chain.invoke("머리 아프다")
 
-llm = HuggingFacePipeline(pipeline=gen)
-
-prev_chat=[]
-prompt = template.create_chat_prompt_template(prev_chat, gemma_2_tokenizer)
-
-rag_chain = ({"documents": retriever, "question": RunnablePassthrough()}
-             | prompt
-             | llm
-             | StrOutputParser()
-             )
-
-answer = rag_chain.invoke("머리 아프다")
+if __name__ == "__main__":
+    main()
