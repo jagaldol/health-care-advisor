@@ -10,8 +10,6 @@ Follow the steps below to set up your development environment and get started wi
 
 Copy the .env.example file to .env and update the environment variables as needed:
 
-bash
-
 ```sh
 $ cp .env.example .env
 ```
@@ -49,3 +47,30 @@ Once the environment is set up, you can start the application using the appropri
 ```sh
 $ python main.py
 ```
+
+## Sturctures
+
+```text
+health-care-advisor
+├── main.py
+├── models
+│   └── model_loader.py
+├── notebooks
+├── ragchain
+│   ├── pipeline_setup.py
+│   └── rag_chain.py
+├── retriever
+│   ├── hybrid_search_retriever.py
+│   └── retriever_setup.py
+├── template
+│   ├── generation_prompt.py
+│   └── script.py
+└── utils
+    └── environment.py
+```
+
+## Collaborators
+
+|          [임영윤](https://github.com/Lim-YoungYoon)          |          [안혜준](https://github.com/jagaldol)          |
+| :----------------------------------------------------------: | :-----------------------------------------------------: |
+| <img src="https://github.com/Lim-YoungYoon.png" width="100"> | <img src="https://github.com/jagaldol.png" width="100"> |
