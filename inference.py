@@ -16,8 +16,7 @@ def main():
     utils.load_environment()
 
     chain = RAGChian()
-
-    chain.chaining(
+    answer = chain.chaining(
         args.query,
         retriever_kwargs={
             "alpha": 0.95,
@@ -30,6 +29,9 @@ def main():
             'repetition_penalty': 1.1
         }
     )
+    for chunk in answer:
+        print(chunk, end="", flush=True)
+
 
 if __name__ == "__main__":
     main()

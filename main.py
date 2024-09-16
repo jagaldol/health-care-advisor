@@ -52,4 +52,7 @@ async def run_inference(body: RequestBody):
         llm_kwargs=llm_kwargs
     )
 
-    return response
+    # Convert the generator chunks to a single string
+    response_string = ''.join(str(chunk) for chunk in response)
+
+    return response_string

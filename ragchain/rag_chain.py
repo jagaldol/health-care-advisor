@@ -50,6 +50,4 @@ class RAGChian:
                     | llm
                     | StrOutputParser())
         
-        answer = rag_chain.invoke(query)
-
-        return answer
+        return rag_chain.stream(query)

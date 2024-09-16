@@ -1,5 +1,5 @@
 from transformers import pipeline, TextStreamer
-from langchain_huggingface import HuggingFacePipeline
+from .huggingface_pipeline import HuggingFacePipeline
 import torch
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
@@ -26,13 +26,11 @@ def setup_text_generation_pipeline(model: PreTrainedModel,
         Pipeline: 텍스트 생성 모델과 설정된 옵션을 기반으로 하는 HuggingFacePipeline 객체를 반환합니다. 
         이를 통해 텍스트 생성이 수행됩니다.
     """
-    streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
     return HuggingFacePipeline(pipeline= 
                                pipeline(task='text-generation',
                                         model=model,
                                         tokenizer=tokenizer,
                                         max_new_tokens=1024,
-                                        streamer=streamer,
                                         device=0 if torch.cuda.is_available() else -1,
                                         temperature=temperature,
                                         top_p=top_p,
