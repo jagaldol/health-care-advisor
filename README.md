@@ -48,6 +48,16 @@ Once the environment is set up, you can start the application using the appropri
 $ python main.py
 ```
 
+## Inference
+
+If you want a single response, run the inference.py script with a query to get a direct answer from the model:
+
+```sh
+$ python inference.py "배탈 난거 같은데 어떻게 해?"
+```
+
+This script takes a user query as input and generates a relevant response based on the AI model.
+
 ## Sturctures
 
 ```text
