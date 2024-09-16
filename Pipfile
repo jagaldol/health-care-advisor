@@ -14,12 +14,11 @@ torchvision = "*"
 torchaudio = "*"
 transformers = "*"
 langchain = "*"
-langchain-community = "*"
 langchain-pinecone = "*"
-langchain-huggingface = "*"
 flagembedding = "*"
 peft = "*"
-uvicorn = {extras = ["standard"], version = "*"}
+uvicorn = {extras = ["standard"] }
+fastapi = {extras = ["all"] }
 
 [dev-packages]
 
