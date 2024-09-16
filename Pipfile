@@ -19,6 +19,7 @@ langchain-pinecone = "*"
 langchain-huggingface = "*"
 flagembedding = "*"
 peft = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 
