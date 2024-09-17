@@ -45,7 +45,7 @@ $ pipenv shell
 After setting up the environment, you can start the application with the following command:
 
 ```sh
-$ uvicorn main:app --host 0.0.0.0
+$ python main.py
 ```
 
 Once the server is running, you can access the API at http://localhost:8000.

@@ -1,4 +1,4 @@
-from transformers import pipeline, TextStreamer
+from transformers import pipeline
 from .huggingface_pipeline import HuggingFacePipeline
 import torch
 from transformers import PreTrainedModel, PreTrainedTokenizer
