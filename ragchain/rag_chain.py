@@ -10,7 +10,8 @@ class RAGChian:
         self.embedding_model = models.load_embedding_model('BAAI/bge-m3')
 
     def chaining(self, 
-                 query: str, 
+                 query: str,
+                 history: list[str] = None,
                  retriever_kwargs: dict = None,
                  llm_kwargs: dict = None) -> str:
         """
@@ -27,6 +28,9 @@ class RAGChian:
             str: 입력 쿼리에 대한 생성된 응답 텍스트를 반환합니다.
         """
 
+        if history is None:
+            history = []
+
         # retriever_kwargs와 llm_kwargs 기본값 설정
         if retriever_kwargs is None:
             retriever_kwargs = {}
@@ -34,11 +38,13 @@ class RAGChian:
         if llm_kwargs is None:
             llm_kwargs = {}
 
+        prev_chat = [{"role": "user" if idx % 2 == 0 else "assistant", "content": message} for idx, message in enumerate(history)]
+
         # Retriever 설정
         rag_retriever = retriever.setup_retriever(self.embedding_model, **retriever_kwargs)
 
         # 프롬프트 생성
-        prompt = template.create_chat_prompt_template(self.gemma_2_tokenizer)
+        prompt = template.create_chat_prompt_template(self.gemma_2_tokenizer, prev_chat=prev_chat)
         
         # 텍스트 생성 파이프라인 설정
         llm = ragchain.setup_text_generation_pipeline(self.gemma_2_model, self.gemma_2_tokenizer, **llm_kwargs)
