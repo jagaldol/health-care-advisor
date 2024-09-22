@@ -19,6 +19,7 @@ flagembedding = "*"
 peft = "*"
 uvicorn = {extras = ["standard"] }
 fastapi = {extras = ["all"] }
+bitsandbytes = "*"
 
 [dev-packages]
 
