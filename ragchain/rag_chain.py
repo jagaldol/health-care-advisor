@@ -6,7 +6,7 @@ import models, ragchain, retriever, template
 class RAGChian:
     def __init__(self):
         # 모델 및 토크나이저 로드
-        self.gemma_2_model, self.gemma_2_tokenizer = models.load_gemma_model("google/gemma-2-2b-it")
+        self.gemma_2_model, self.gemma_2_tokenizer = models.load_gemma_model("devlim/Korea-HealthCare-RAFT-unit8")
         self.embedding_model = models.load_embedding_model('BAAI/bge-m3')
 
     def chaining(self, 
