@@ -1,24 +1,21 @@
-# health-care-advisor
+# Undoc: RAFT 및 RAG 기반 의료상담 챗봇 모델 연구
 
 [![banner](/docs/banner.png)](https://undoc.vercel.app)
 
-The chatbot based on the Gemma 2 model, delivering professional healthcare information to patients quickly and accurately.
+A **medical consultation chatbot** using RAG and RAFT techniques on the Gemma 2 model, achieving high performance in the healthcare domain.
 
 ## Demo
 
 [![demo](/docs/demo.png)](https://undoc.vercel.app/)
 
 - Demo site: https://undoc.vercel.app
-- Demo view Repo: https://github.com/jagaldol/undoc
+- Demo page Repo: https://github.com/jagaldol/undoc
 
-> You can view our demo page on [this site](https://undoc.vercel.app/).
->
 > The repository for the Demo page implementation can be found [here](https://github.com/jagaldol/undoc).
-> you can see our demo page in this site
 
 ## Model
 
-We use the RAFT-finetuned `Gemma-2-2b-it` model with RAG for healthcare datasets.
+The RAFT-finetuned `Gemma-2-2b-it` model is optimized for healthcare question-answering tasks using the `RAG`.
 
 > [Huggingface Model Card](https://huggingface.co/devlim/Korea-HealthCare-RAFT-float16)
 
@@ -101,7 +98,7 @@ $ python inference.py "배탈 난거 같은데 어떻게 해?"
 
 This script takes a user query as input and generates a relevant response based on the AI model.
 
-## Sturctures
+## Structures
 
 ```text
 health-care-advisor
@@ -129,9 +126,9 @@ health-care-advisor
 ## Citation
 
 - 초거대 AI 헬스케어 질의응답 데이터: AI 허브, 초거대 AI 헬스케어 질의응답 데이터
-- Gemma 2 모델: "Gemma 2: Improving Open Language Models at a Practical Size", 2023.
-- RAFT 방법론: "Adapting Language Model to Domain Specific RAG", arXiv preprint arXiv:2403.10131, 2023.
-- RAGAS 평가 방법론: "RAGAS: Automated Evaluation of Retrieval Augmented Generation", 2023.
+- Gemma 2 Model: "Gemma 2: Improving Open Language Models at a Practical Size", 2023.
+- RAFT Methodology: "Adapting Language Model to Domain Specific RAG", arXiv preprint arXiv:2403.10131, 2023.
+- RAGAS Evaluation: "RAGAS: Automated Evaluation of Retrieval Augmented Generation", 2023.
 
 ## Collaborators
 
